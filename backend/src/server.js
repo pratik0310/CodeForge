@@ -1,29 +1,37 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import { ENV } from './lib/env.js';
-import path from 'path';
-dotenv.config();
-const app=express();
-const __dirname =path.resolve();
-// app.get("/",(req,res)=>{
-//     res.status(200).json({message:"success from ap243" });
-// })
+import express from "express";
+import dotenv from "dotenv";
+import path from "path";
+import { ENV } from "./lib/env.js";
 
-app.get("/health",(req,res)=>{
-    res.status(200).json({message:"healthy" });
-})
-//make our ready for deploment
+dotenv.config();
+
+const app = express();
+const __dirname = path.resolve();
+
+/* ---------- API ROUTES ---------- */
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ message: "healthy" });
+});
 
 app.get("/books", (req, res) => {
-    res.status(200).json({ msg: "List of books" });
-})
-if(ENV.NODE_ENV==="production"){
-app.use(express.static(path.join(__dirname,'../frontend/dist')));
+  res.status(200).json({ msg: "List of books" });
+});
 
-app.get("/{*any}",(req,res)=>{
-    res.sendFile(path.join(__dirname,'../frontend/dist/index.html'));
-})
+/* ---------- SERVE FRONTEND ---------- */
+
+if (ENV.NODE_ENV === "production") {
+  const frontendPath = path.join(__dirname, "frontend", "dist");
+
+  app.use(express.static(frontendPath));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
+  });
 }
+
+/* ---------- START SERVER ---------- */
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);

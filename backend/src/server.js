@@ -1,12 +1,17 @@
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 import { ENV } from "./lib/env.js";
 
 dotenv.config();
 
 const app = express();
-const __dirname = path.resolve();
+
+// ✅ Proper __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /* API ROUTES */
 app.get("/health", (req, res) => {
@@ -19,11 +24,11 @@ app.get("/books", (req, res) => {
 
 /* FRONTEND */
 if (ENV.NODE_ENV === "production") {
-  const frontendPath = path.join(__dirname, "frontend", "dist");
+  // 🔥 go OUT of backend/src → frontend/dist
+  const frontendPath = path.join(__dirname, "..", "..", "frontend", "dist");
 
   app.use(express.static(frontendPath));
 
-  // ✅ Express v5 safe fallback
   app.use((req, res) => {
     res.sendFile(path.join(frontendPath, "index.html"));
   });

@@ -4,6 +4,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { ENV } from "./lib/env.js";
+import { connectDB } from "./lib/db.js";
+
 
 dotenv.config();
 
@@ -36,6 +38,17 @@ if (ENV.NODE_ENV === "production") {
 
 /* SERVER */
 const PORT = process.env.PORT || 5000;
+
+const startServer=async ()=>{
+  try {
+    await connectDB();
+    const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
+ 
 });
+  } catch (err) {
+    console.error("Failed to start server:", err);
+  }
+}
+startServer();

@@ -37,4 +37,4 @@ await User.deleteOne({clerkId:id});
 }
 );
 
-export const functions={syncUser,deleteUserFromDB}
+export const functions=[syncUser,deleteUserFromDB];

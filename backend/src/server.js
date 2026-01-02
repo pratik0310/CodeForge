@@ -6,8 +6,10 @@ import { dirname } from "path";
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
 import cors from "cors";
-import { Server } from "inngest/express";
-import { inngest } from "./lib/inngest.js";
+import { serve} from "inngest/express";
+import { inngest,functions } from "./lib/inngest.js";
+
+
 dotenv.config();
 
 const app = express();
@@ -19,9 +21,9 @@ const __dirname = dirname(__filename);
 //middlewares
 app.use(express.json());
 //credential:true means server allows a browser to send cookies along with the requests
-app.use(cors({origin:ENV.CLIENT_URL,Credentials:true}));
+app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));
 
-app.use("/api/inngest",server({client:inngest,functions}))
+app.use("/api/inngest",serve({client:inngest,functions}))
 /* API ROUTES */
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "healthy" });

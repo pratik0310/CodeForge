@@ -11,7 +11,6 @@ import { inngest,functions } from "./lib/inngest.js";
 
 
 dotenv.config();
-
 const app = express();
 
 // Proper __dirname for ES modules

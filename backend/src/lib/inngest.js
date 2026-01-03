@@ -36,5 +36,4 @@ await User.deleteOne({clerkId:id});
 //to do : do somethin else
 }
 );
-
 export const functions=[syncUser,deleteUserFromDB];
